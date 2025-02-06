@@ -1,0 +1,153 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 10px;
+    width: 600px;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+/* Heading */
+h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Ensure consistent width for input, button, and table */
+input,
+button,
+#rolesTableContainer table {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 10px auto;
+    font-size: 16px;
+}
+
+/* Input styling */
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Button for fetching roles */
+#fetchRoles {
+    background-color: #28a745;
+}
+
+#fetchRoles:hover {
+    background-color: #218838;
+}
+
+/* Table Container */
+#rolesTableContainer {
+    width: 100%;
+    max-width: 500px;
+    margin: 10px auto;
+}
+
+/* General table styling */
+#rolesTableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table headers */
+#rolesTableContainer th {
+    background-color: #0078d4;
+    color: white;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 2px solid #005a9e;
+}
+
+/* Table rows */
+#rolesTableContainer td {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Zebra striping */
+#rolesTableContainer tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover effect */
+#rolesTableContainer tr:hover {
+    background-color: #e6f7ff;
+}
+
+#rolesTableContainer th,
+#rolesTableContainer td {
+    font-size: 14px;
+    /* Adjusted from default size */
+}
+
+/* Tabs styling */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    background-color: lightgrey;
+}
+
+.tab-button.active {
+    background-color: darkgrey;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    /* Hide all tabs by default */
+    padding: 10px;
+    border: 1px solid #ccc;
+    padding: 15px;
+}
+
+.tab-content.active {
+    display: block;
+    /* Only show the active tab */
+}
+
+/* Result Box */
+#results {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: monospace;
+}
