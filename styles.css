@@ -63,6 +63,9 @@ button:hover {
     width: 100%;
     max-width: 500px;
     margin: 10px auto;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
 }
 
 /* General table styling */
@@ -150,4 +153,20 @@ button:hover {
     border-radius: 5px;
     font-size: 14px;
     font-family: monospace;
+}
+
+#feedbackSection {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#feedbackSection a {
+    color: #0078d4;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#feedbackSection a:hover {
+    text-decoration: underline;
 }

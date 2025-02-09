@@ -1,4 +1,3 @@
-
 // Get Dataverse Base URL
 async function getDataverseUrl() {
     return new Promise((resolve, reject) => {
@@ -33,7 +32,7 @@ async function fetchDataverseData(apiUrl) {
 
         return response.json();
     } catch (error) {
-        console.log("Error fetching data:", error);
+        console.log("Error fetching data:" + error);
         return null;
     }
 }
@@ -41,6 +40,7 @@ async function fetchDataverseData(apiUrl) {
 // Fetch User Security Roles
 async function getUserSecurityRoles(fullname) {
     const baseUrl = await getDataverseUrl();
+    showLoading(true);
 
     const fetchUserRoleXml = `
     <fetch distinct="true">
@@ -75,49 +75,44 @@ async function getUserSecurityRoles(fullname) {
       </entity>
     </fetch>`;
 
-    // Fetch user roles (direct assignments)
-    const userRolesData = await fetchDataverseData(`${baseUrl}/api/data/v9.1/roles?fetchXml=${encodeURIComponent(fetchUserRoleXml)}`);
+    try {
+        const userRolesData = await fetchDataverseData(`${baseUrl}/api/data/v9.1/roles?fetchXml=${encodeURIComponent(fetchUserRoleXml)}`);
+        const teamRolesData = await fetchDataverseData(`${baseUrl}/api/data/v9.1/roles?fetchXml=${encodeURIComponent(fetchTeamsRoleXml)}`);
 
-    // Fetch team roles (roles assigned via teams)
-    const teamRolesData = await fetchDataverseData(`${baseUrl}/api/data/v9.1/roles?fetchXml=${encodeURIComponent(fetchTeamsRoleXml)}`);
+        const userRoles = userRolesData?.value?.map(role => ({ name: role.name, teamName: "N/A", source: "Direct" })) || [];
+        const teamRoles = teamRolesData?.value?.map(role => ({ name: role.name, teamName: role["team.name"] || "Unknown", source: "Team" })) || [];
 
-    // Extract roles, team names, and their source (Direct or Team)
-    const userRoles = userRolesData?.value?.map(role => ({ name: role.name, teamName: "N/A", source: "Direct" })) || [];
-    const teamRoles = teamRolesData?.value?.map(role => ({ name: role.name, teamName: role["team.name"] || "Unknown", source: "Team" })) || [];
+        const uniqueRoles = [];
+        const roleMap = new Map();
 
-    // Combine results and remove duplicates (keeping source information)
-    const uniqueRoles = [];
-    const roleMap = new Map();
+        [...userRoles, ...teamRoles].forEach(role => {
+            if (!roleMap.has(role.name)) {
+                roleMap.set(role.name, role);
+            } else {
+                roleMap.set(role.name, { name: role.name, teamName: role.teamName, source: "Direct & Team" });
+            }
+        });
 
-    [...userRoles, ...teamRoles].forEach(role => {
-        if (!roleMap.has(role.name)) {
-            roleMap.set(role.name, role);
+        uniqueRoles.push(...roleMap.values());
+
+        if (uniqueRoles.length === 0) {
+            displayMessage(`No security roles found for user '${fullname}'.`, true);
         } else {
-            // If the same role exists in both sources, update source to "Direct & Team"
-            roleMap.set(role.name, { name: role.name, teamName: role.teamName, source: "Direct & Team" });
+            displayRolesTable(uniqueRoles);
+            displayMessage(`Found ${uniqueRoles.length} roles for '${fullname}'.`);
         }
-    });
-
-    uniqueRoles.push(...roleMap.values());
-
-    if (uniqueRoles.length === 0) {
-        alert(`No security roles found for user '${fullname}'.`);
-        return;
+    } catch (error) {
+        console.log("Error fetching user roles:" + error);
+        displayMessage("Failed to fetch user roles. Please try again.", true);
+    } finally {
+        showLoading(false);
     }
-
-    // Display roles with their source (Direct / Team / Both)
-    displayRolesTable(uniqueRoles);
 }
 
-
+// Display roles in a table
 function displayRolesTable(roles) {
     const tableContainer = document.getElementById("rolesTableContainer");
     if (!tableContainer) return;
-
-    if (roles.length === 0) {
-        tableContainer.innerHTML = "<p>No roles found.</p>";
-        return;
-    }
 
     let tableHtml = `
         <table border="1">
@@ -143,37 +138,39 @@ function displayRolesTable(roles) {
     tableContainer.innerHTML = tableHtml;
 }
 
+// Show or hide loading indicator
+function showLoading(isLoading) {
+    const fetchButton = document.getElementById("fetchRoles");
+    if (isLoading) {
+        fetchButton.disabled = true;
+        fetchButton.textContent = "Loading...";
+    } else {
+        fetchButton.disabled = false;
+        fetchButton.textContent = "Get User Roles";
+    }
+}
+
+// Display feedback message
+function displayMessage(message, isError = false) {
+    const feedbackDiv = document.getElementById("feedbackMessage");
+    feedbackDiv.innerHTML = `
+        <p style="color: ${isError ? 'red' : 'green'}; margin: 5px 0;">
+            ${message}
+        </p>
+    `;
+    // Automatically clear the message after 5 seconds
+    setTimeout(() => {
+        feedbackDiv.innerHTML = "";
+    }, 5000);
+}
 
 
 // Event Listener for Fetching User Roles
-document.getElementById("fetchRoles").addEventListener("click", function () {
+document.getElementById("fetchRoles").addEventListener("click", async function () {
     const fullname = document.getElementById("fullname").value.trim();
     if (fullname) {
-        getUserSecurityRoles(fullname);
+        await getUserSecurityRoles(fullname);
     } else {
         alert("Please enter the fullname.");
     }
-});
-
-// Toggle User Role Section
-function toggleUserRoleSection() {
-    const section = document.getElementById("userRoleSection");
-    section.style.display = section.style.display === "none" ? "block" : "none";
-}
-
-// Tab Navigation Logic
-document.addEventListener("DOMContentLoaded", function () {
-    const tabButtons = document.querySelectorAll(".tab-button");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    tabButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            tabButtons.forEach(btn => btn.classList.remove("active"));
-            tabContents.forEach(content => content.classList.remove("active"));
-
-            const tabId = this.getAttribute("data-tab");
-            this.classList.add("active");
-            document.getElementById(tabId).classList.add("active");
-        });
-    });
 });

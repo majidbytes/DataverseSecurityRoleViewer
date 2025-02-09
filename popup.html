@@ -15,14 +15,22 @@
     <input type="text" id="fullname" placeholder="Enter fullname of the user, will get direct and team roles" required>
     <div id="userRoleSection">
         <button id="fetchRoles">Get User Roles</button>
+
+        <div id="loading" style="display:none; text-align:center; margin-top:10px;">
+            <p>Loading...</p>
+        </div>
+
+        <div id="feedbackMessage" style="margin-top: 10px;"></div>
+
         <div id="rolesTableContainer"></div>
     </div>
 
     <div id="feedbackSection">
-        <p>Have feedback? <a
-                href="mailto:majidbytes@gmail.com?subject=Feedback for Dataverse Security Roles Viewer">Send us an
-                email</a></p>
+        <p>Have feedback or issues? <a href="https://github.com/majidbytes/DataverseSecurityRoleViewer/issues"
+                target="_blank">Report on GitHub</a></p>
     </div>
+
+
 </body>
 
 </html>
