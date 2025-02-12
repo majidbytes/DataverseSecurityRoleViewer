@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Dataverse Security Roles Viewer",
-    "version": "1.0",
+    "version": "1.2",
     "description": "View User Roles Instantly.",
     "host_permissions": [
         "https://*.dynamics.com/*"

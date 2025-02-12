@@ -1,6 +1,8 @@
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
+    font-size: 12px;
+    /* Reduced font size for a cleaner, compact layout */
     margin: 10px;
     padding: 10px;
     width: 600px;
@@ -10,46 +12,79 @@ body {
 
 /* Heading */
 h1 {
-    font-size: 1.5em;
+    font-size: 14px;
+    /* Smaller heading size */
     margin-bottom: 10px;
     text-align: center;
 }
 
-/* Ensure consistent width for input, button, and table */
+/* Tabs Styling */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.tab-button {
+    padding: 6px 12px;
+    /* Reduced padding for compact buttons */
+    cursor: pointer;
+    border: none;
+    background-color: lightgrey;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.tab-button.active {
+    background-color: darkgrey;
+    font-weight: bold;
+}
+
+/* Tab Content Areas */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Input, Button, and Table Styling */
 input,
 button,
-#rolesTableContainer table {
+#rolesTableContainer table,
+#roleUsersTableContainer table,
+select {
     width: 100%;
     max-width: 500px;
     display: block;
-    margin: 10px auto;
-    font-size: 16px;
+    margin: 8px auto;
+    font-size: 12px;
+    /* Reduced font size for inputs, buttons, and tables */
 }
 
-/* Input styling */
 input {
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 4px;
 }
 
-/* Button Styling */
 button {
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Button for fetching roles */
+/* Specific styling for the Get User Roles button */
 #fetchRoles {
     background-color: #28a745;
 }
@@ -58,107 +93,63 @@ button:hover {
     background-color: #218838;
 }
 
-/* Table Container */
-#rolesTableContainer {
+/* Table Styling */
+#rolesTableContainer table,
+#roleUsersTableContainer table {
     width: 100%;
-    max-width: 500px;
-    margin: 10px auto;
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-}
-
-/* General table styling */
-#rolesTableContainer table {
-    width: 100%;
+    table-layout: fixed;
+    /* Ensures equal-width columns */
     border-collapse: collapse;
-    margin-top: 15px;
-    background-color: #fff;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
 }
 
-/* Table headers */
-#rolesTableContainer th {
+#rolesTableContainer th,
+#roleUsersTableContainer th,
+#rolesTableContainer td,
+#roleUsersTableContainer td {
+    padding: 6px;
+    border: 1px solid #ddd;
+    text-align: left;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#rolesTableContainer th,
+#roleUsersTableContainer th {
     background-color: #0078d4;
     color: white;
-    padding: 8px;
-    text-align: left;
-    border-bottom: 2px solid #005a9e;
+    font-size: 11px;
+    /* Smaller font size for table headers */
 }
 
-/* Table rows */
-#rolesTableContainer td {
-    padding: 6px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Zebra striping */
-#rolesTableContainer tr:nth-child(even) {
+#rolesTableContainer tr:nth-child(even),
+#roleUsersTableContainer tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Hover effect */
-#rolesTableContainer tr:hover {
+#rolesTableContainer tr:hover,
+#roleUsersTableContainer tr:hover {
     background-color: #e6f7ff;
+}
+
+/* Ensure table container scrolls horizontally if needed */
+#rolesTableContainer,
+#roleUsersTableContainer {
+    overflow-x: auto;
 }
 
 #rolesTableContainer th,
 #rolesTableContainer td {
-    font-size: 14px;
-    /* Adjusted from default size */
+    width: 33.33%;
+    /* Ensures each column takes up exactly one-third of the table width */
 }
 
-/* Tabs styling */
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.tab-button {
-    padding: 8px 16px;
-    cursor: pointer;
-    border: none;
-    background-color: lightgrey;
-}
-
-.tab-button.active {
-    background-color: darkgrey;
-    font-weight: bold;
-}
-
-.tab-content {
-    display: none;
-    /* Hide all tabs by default */
-    padding: 10px;
-    border: 1px solid #ccc;
-    padding: 15px;
-}
-
-.tab-content.active {
-    display: block;
-    /* Only show the active tab */
-}
-
-/* Result Box */
-#results {
-    margin-top: 20px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    font-family: monospace;
-}
-
+/* Feedback Section */
 #feedbackSection {
     margin-top: 15px;
     text-align: center;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 #feedbackSection a {

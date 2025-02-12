@@ -2,18 +2,25 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dataverse Security Roles Viewer</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dataverse Security Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
     <script defer src="popup.js"></script>
 </head>
 
 <body>
-    <h1>Dataverse Security Roles Viewer</h1>
+    <h1>Dataverse Security Viewer</h1>
 
-    <input type="text" id="fullname" placeholder="Enter fullname of the user, will get direct and team roles" required>
-    <div id="userRoleSection">
+    <!-- Tab Buttons -->
+    <div class="tabs">
+        <button class="tab-button active" data-tab="userRolesTab">User Roles</button>
+        <button class="tab-button" data-tab="securityRoleTab">Security Role Members</button>
+    </div>
+
+    <!-- Tab Content: User Roles -->
+    <div id="userRolesTab" class="tab-content active">
+        <input type="text" id="fullname" placeholder="Enter fullname to fetch security roles" required />
         <button id="fetchRoles">Get User Roles</button>
 
         <div id="loading" style="display:none; text-align:center; margin-top:10px;">
@@ -21,16 +28,26 @@
         </div>
 
         <div id="feedbackMessage" style="margin-top: 10px;"></div>
-
         <div id="rolesTableContainer"></div>
     </div>
 
-    <div id="feedbackSection">
-        <p>Have feedback or issues? <a href="https://github.com/majidbytes/DataverseSecurityRoleViewer/issues"
-                target="_blank">Report on GitHub</a></p>
+    <!-- Tab Content: Security Role Members -->
+    <div id="securityRoleTab" class="tab-content">
+        <select id="securityRoles">
+            <option value="">Loading security roles...</option>
+        </select>
+        <button id="applyRole">Apply</button>
+        <div id="roleUsersFeedbackMessage" style="margin-top: 10px;"></div>
+        <div id="roleUsersTableContainer"></div>
     </div>
 
-
+    <div id="feedbackSection">
+        <p>
+            Have feedback or issues?
+            <a href="https://github.com/majidbytes/DataverseSecurityRoleViewer/issues" target="_blank">Report on
+                GitHub</a>
+        </p>
+    </div>
 </body>
 
 </html>
