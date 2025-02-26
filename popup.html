@@ -20,8 +20,20 @@
 
     <!-- Tab Content: User Roles -->
     <div id="userRolesTab" class="tab-content active">
+
+        <!-- User Search Section -->
+        <div id="userSearchSection">
+            <input type="text" id="userSearchInput" placeholder="Search for a user" />
+            <button id="searchUserButton">Search User</button>
+            <select id="userSearchDropdown">
+                <option value="">Select a user</option>
+            </select>
+        </div>
+
+        <!--
         <input type="text" id="fullname" placeholder="Enter fullname to fetch security roles" required />
         <button id="fetchRoles">Get User Roles</button>
+        -->
 
         <div id="loading" style="display:none; text-align:center; margin-top:10px;">
             <p>Loading...</p>

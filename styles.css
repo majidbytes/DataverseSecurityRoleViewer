@@ -161,3 +161,19 @@ button:hover {
 #feedbackSection a:hover {
     text-decoration: underline;
 }
+
+/* Custom styling for the user search dropdown */
+#userSearchDropdown {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Adding a custom arrow icon */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20"><path fill="%230078d4" d="M5.516 7.548l4.484 4.484 4.484-4.484L16 8.548l-6 6-6-6z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}

@@ -120,6 +120,7 @@ async function getUserSecurityRoles(fullname) {
     const uniqueRoles = Array.from(roleMap.values());
 
     if (uniqueRoles.length === 0) {
+      displayRolesTable(uniqueRoles);
       displayMessage(`No security roles found for user '${fullname}'.`, true);
     } else {
       displayRolesTable(uniqueRoles);
@@ -134,8 +135,18 @@ async function getUserSecurityRoles(fullname) {
 }
 
 function displayRolesTable(roles) {
+  debugger;
   const tableContainer = document.getElementById("rolesTableContainer");
   if (!tableContainer) return;
+
+  // Clear the container before rendering new content.
+  tableContainer.innerHTML = "";
+
+  // If no roles are returned, clear the table container and optionally display a message.
+  if (!roles || roles.length === 0) {
+    tableContainer.innerHTML = "<p>No security roles found.</p>";
+    return;
+  }
 
   let tableHtml = `
       <table border="1">
@@ -160,13 +171,13 @@ function displayRolesTable(roles) {
 }
 
 function showLoading(isLoading) {
-  const fetchButton = document.getElementById("fetchRoles");
+  const searchButton = document.getElementById("searchUserButton");
   if (isLoading) {
-    fetchButton.disabled = true;
-    fetchButton.textContent = "Loading...";
+    searchButton.disabled = true;
+    searchButton.textContent = "Searching...";
   } else {
-    fetchButton.disabled = false;
-    fetchButton.textContent = "Get User Roles";
+    searchButton.disabled = false;
+    searchButton.textContent = "Search User";
   }
 }
 
@@ -336,6 +347,7 @@ function displayRoleUsersFeedback(message, isError = false) {
 // -------------------------------
 
 // For fetching user roles by fullname.
+/*
 document.getElementById("fetchRoles").addEventListener("click", async function () {
   const fullname = document.getElementById("fullname").value.trim();
   if (fullname) {
@@ -344,6 +356,7 @@ document.getElementById("fetchRoles").addEventListener("click", async function (
     alert("Please enter the fullname.");
   }
 });
+*/
 
 // For applying the selected security role.
 document.getElementById("applyRole").addEventListener("click", async function () {
@@ -380,4 +393,86 @@ document.querySelectorAll(".tab-button").forEach((btn) => {
 document.addEventListener("DOMContentLoaded", async function () {
   const rolesData = await getSecurityRoles();
   populateSecurityRolesDropdown(rolesData);
+});
+
+
+// ---------------------------------
+// Function to search for users by partial fullname
+// ---------------------------------
+async function searchUsers(searchTerm) {
+  const baseUrl = await getDataverseUrl();
+  const fetchXml = `
+    <fetch distinct="true">
+      <entity name="systemuser">
+        <attribute name="fullname" />
+        <attribute name="systemuserid" />
+        <filter type="and">
+          <condition attribute="fullname" operator="like" value="%${searchTerm}%" />
+        </filter>
+      </entity>
+    </fetch>`;
+  const url = `${baseUrl}/api/data/v9.1/systemusers?fetchXml=${encodeURIComponent(fetchXml)}`;
+  return await fetchDataverseData(url);
+}
+
+// ---------------------------------
+// Function to populate the user search dropdown
+// ---------------------------------
+function populateUserDropdown(usersData) {
+  const dropdown = document.getElementById("userSearchDropdown");
+  // Clear previous entries
+  dropdown.innerHTML = "";
+  if (usersData && usersData.value && usersData.value.length > 0) {
+    // Add a default option
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.text = "Select a user";
+    dropdown.appendChild(defaultOption);
+
+    usersData.value.forEach((user) => {
+      const option = document.createElement("option");
+      // Save the fullname in the value so it can be used to fetch roles
+      option.value = user.fullname;
+      option.text = user.fullname;
+      dropdown.appendChild(option);
+    });
+  } else {
+    const option = document.createElement("option");
+    option.value = "";
+    option.text = "No users found";
+    dropdown.appendChild(option);
+  }
+}
+
+// ---------------------------------
+// Event Listener for the user search button
+// ---------------------------------
+document.getElementById("searchUserButton").addEventListener("click", async function () {
+  const searchTerm = document.getElementById("userSearchInput").value.trim();
+  if (searchTerm) {
+    // Optionally, clear previous search results and show a temporary loading state
+    const dropdown = document.getElementById("userSearchDropdown");
+    dropdown.innerHTML = "";
+    const loadingOption = document.createElement("option");
+    loadingOption.text = "Loading...";
+    dropdown.appendChild(loadingOption);
+
+    // Perform the search
+    const usersData = await searchUsers(searchTerm);
+    populateUserDropdown(usersData);
+  } else {
+    alert("Please enter a search term.");
+  }
+});
+
+// ---------------------------------
+// Event Listener to handle selection from the dropdown
+// ---------------------------------
+// When a user is selected, use their full name to retrieve security roles
+document.getElementById("userSearchDropdown").addEventListener("change", async function () {
+  const selectedFullName = this.value;
+  if (selectedFullName) {
+    // Use the existing function to fetch and display user roles by fullname
+    await getUserSecurityRoles(selectedFullName);
+  }
 });
